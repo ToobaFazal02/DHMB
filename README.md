@@ -111,4 +111,4 @@ If runtime JSON files do not exist, the app seeds default users:
 
 ## License
 
-Add your preferred license (for example, MIT) in a `LICENSE` file.
+This project is licensed under MIT License.
