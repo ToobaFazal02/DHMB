@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e0b06">
+  <title>DHMB Offline</title>
+  <style>
+    :root {
+      --bg: #040404;
+      --panel: #111111;
+      --line: rgba(212, 168, 67, 0.18);
+      --text: #f7ecd2;
+      --muted: #bda98a;
+      --gold: #d4a843;
+      --teal: #2ec4a9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(46, 196, 169, 0.08), transparent 35%),
+        linear-gradient(135deg, rgba(212, 168, 67, 0.08), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .card {
+      width: min(100%, 560px);
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.05;
+    }
+
+    p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: var(--gold);
+      color: #1a140c;
+    }
+
+    .secondary {
+      border: 1px solid var(--line);
+      color: var(--teal);
+    }
+  </style>
+</head>
+<body>
+  <article class="card">
+    <p class="eyebrow">DHMB Handicraft Marketplace</p>
+    <h1>You are offline.</h1>
+    <p>The app shell is installed, but live marketplace analytics need the local API at <strong>http://localhost:5000</strong>. Reconnect and reload to restore dashboard charts, artisan pricing, and buyer product feeds.</p>
+    <div class="actions">
+      <a class="primary" href="/admin">Open Cached App</a>
+      <a class="secondary" href="/">Try Again</a>
+    </div>
+  </article>
+</body>
+</html>

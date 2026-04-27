@@ -1,0 +1,2857 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#040404">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DHMB">
+  <title>DHMB | Digital Handicraft Marketplace for Balochistan</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #040404;
+      --bg-soft: #0a0a0a;
+      --surface: rgba(12, 12, 12, 0.96);
+      --surface-strong: #111111;
+      --surface-alt: rgba(255, 255, 255, 0.03);
+      --line: rgba(212, 168, 67, 0.12);
+      --line-strong: rgba(212, 168, 67, 0.26);
+      --text: #f5f5f5;
+      --text-soft: #b8b8b8;
+      --muted: #8d8d8d;
+      --gold: #d4a843;
+      --teal: #2ec4a9;
+      --coral: #e8714a;
+      --purple: #8b5cf6;
+      --green: #4ade80;
+      --danger: #fb7185;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+      --radius: 8px;
+      --content: 1480px;
+      --bottom-space: 92px;
+    }
+
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f5f0e5;
+      --bg-soft: #ebe2d0;
+      --surface: rgba(255, 251, 244, 0.96);
+      --surface-strong: #fffaf1;
+      --surface-alt: rgba(14, 11, 6, 0.03);
+      --line: rgba(90, 64, 18, 0.14);
+      --line-strong: rgba(90, 64, 18, 0.28);
+      --text: #25190d;
+      --text-soft: #5a4935;
+      --muted: #7f6a55;
+      --gold: #b8881e;
+      --teal: #178c76;
+      --coral: #cf5d36;
+      --purple: #6d4bd2;
+      --green: #15803d;
+      --danger: #dc2626;
+      --shadow: 0 20px 50px rgba(72, 44, 12, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, rgba(46, 196, 169, 0.05), transparent 24%),
+        linear-gradient(135deg, rgba(212, 168, 67, 0.05), transparent 54%),
+        linear-gradient(180deg, var(--bg-soft), var(--bg));
+      color: var(--text);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 90%);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 120%),
+        var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .app-shell {
+      width: min(100%, var(--content));
+      margin: 0 auto;
+      padding: 18px 14px var(--bottom-space);
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .topbar-main {
+      display: grid;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .brand-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, rgba(212, 168, 67, 0.24), rgba(46, 196, 169, 0.22));
+      border: 1px solid var(--line-strong);
+      flex: 0 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: var(--gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+      font-family: "Bitter", Georgia, serif;
+      letter-spacing: 0;
+    }
+
+    .brand h1 {
+      font-size: clamp(1.4rem, 2vw, 2.1rem);
+      line-height: 1.06;
+      max-width: 14ch;
+    }
+
+    .brand p,
+    .subtext,
+    .field-note,
+    .panel-copy,
+    .message-meta,
+    .stat-note {
+      margin: 8px 0 0;
+      color: var(--text-soft);
+      line-height: 1.45;
+      font-size: 0.85rem;
+    }
+
+    .actions,
+    .status-row,
+    .desktop-nav,
+    .mobile-nav,
+    .pill-row,
+    .button-row,
+    .filter-row,
+    .payment-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status-pill,
+    .user-pill,
+    .live-pill,
+    .filter-pill,
+    .badge-pill {
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--muted);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04);
+    }
+
+    .status-pill.live .dot,
+    .live-pill .dot {
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.15);
+    }
+
+    .status-pill.degraded .dot {
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(212, 168, 67, 0.16);
+    }
+
+    .status-pill.offline .dot {
+      background: var(--danger);
+      box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.16);
+    }
+
+    .button,
+    .nav-button,
+    .chip-button,
+    .mini-button {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      color: var(--text);
+      font-weight: 700;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .button:hover,
+    .nav-button:hover,
+    .chip-button:hover,
+    .mini-button:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+    }
+
+    .button.primary,
+    .nav-button.active,
+    .chip-button.active {
+      background: linear-gradient(135deg, rgba(212, 168, 67, 0.96), rgba(232, 113, 74, 0.92));
+      color: #20160f;
+      border-color: transparent;
+    }
+
+    .desktop-nav {
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      overflow-x: auto;
+    }
+
+    .nav-button {
+      white-space: nowrap;
+    }
+
+    .mobile-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(180deg, rgba(4, 4, 4, 0), rgba(4, 4, 4, 0.96) 36%);
+      justify-content: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .mobile-nav .nav-button {
+      flex: 1 1 0;
+      min-width: 0;
+      justify-content: center;
+      padding-inline: 8px;
+      font-size: 0.83rem;
+    }
+
+    .error-banner {
+      display: none;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(251, 113, 133, 0.24);
+      border-radius: var(--radius);
+      background: rgba(232, 113, 74, 0.1);
+      color: var(--text);
+    }
+
+    .portal {
+      display: none;
+      gap: 14px;
+      animation: portal-enter 220ms ease;
+    }
+
+    .portal.active {
+      display: grid;
+    }
+
+    @keyframes portal-enter {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-grid,
+    .chart-grid,
+    .kpi-grid,
+    .segment-grid,
+    .notification-grid,
+    .artisan-grid,
+    .product-grid,
+    .commerce-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-card,
+    .section-card,
+    .chart-card,
+    .table-card,
+    .commerce-card {
+      padding: 16px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--text-soft);
+      line-height: 1.4;
+      font-size: 0.84rem;
+      max-width: 40ch;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-stat,
+    .kpi-card,
+    .segment-card,
+    .notice-card,
+    .product-card,
+    .summary-line,
+    .metric-box,
+    .form-shell,
+    .message-shell,
+    .timeline-shell {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-alt);
+    }
+
+    .mini-stat,
+    .kpi-card,
+    .segment-card,
+    .notice-card,
+    .product-card,
+    .metric-box {
+      padding: 14px;
+    }
+
+    .mini-stat {
+      min-height: 108px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .value {
+      font-size: clamp(1.45rem, 4vw, 2.3rem);
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .pipeline-step {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-alt);
+    }
+
+    .pipeline-step:not(:last-child)::after {
+      content: ">";
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .pipeline-top {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .pipeline-tag,
+    .icon-box,
+    .avatar-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.06);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .pipeline-tag.bronze {
+      background: rgba(212, 168, 67, 0.88);
+      color: #1e140d;
+    }
+
+    .pipeline-tag.silver {
+      background: rgba(228, 233, 237, 0.88);
+      color: #1e1c19;
+    }
+
+    .pipeline-tag.gold {
+      background: rgba(232, 113, 74, 0.88);
+      color: #1e140d;
+    }
+
+    .pipeline-tag.model {
+      background: rgba(46, 196, 169, 0.88);
+      color: #1e140d;
+    }
+
+    .size-chip,
+    .tone-chip {
+      width: fit-content;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .kpi-card {
+      position: relative;
+      min-height: 124px;
+      display: grid;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: var(--gold);
+    }
+
+    .kpi-card.teal::before {
+      background: var(--teal);
+    }
+
+    .kpi-card.coral::before {
+      background: var(--coral);
+    }
+
+    .kpi-card.purple::before {
+      background: var(--purple);
+    }
+
+    .card-head,
+    .record-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .card-key {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .chart-card canvas {
+      width: 100%;
+      height: 320px;
+      max-height: 320px;
+    }
+
+    .table-shell {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-alt);
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.91rem;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: var(--surface-strong);
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      z-index: 1;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    tbody tr:hover {
+      background: rgba(212, 168, 67, 0.08);
+    }
+
+    .sort-button {
+      border: none;
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font: inherit;
+      text-transform: inherit;
+      letter-spacing: inherit;
+      font-weight: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sort-mark {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+
+    .segment-grid,
+    .notification-grid,
+    .product-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .metric-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metric-box {
+      padding: 12px;
+      background: var(--surface-strong);
+    }
+
+    .metric-box .label {
+      margin-bottom: 6px;
+    }
+
+    .progress-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .progress-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-alt);
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .form-shell {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+
+    .field input,
+    .field select,
+    .field textarea,
+    .search-input,
+    .message-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      color: var(--text);
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 128px;
+      padding: 14px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus,
+    .search-input:focus,
+    .message-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.12);
+    }
+
+    .search-row {
+      display: grid;
+      gap: 10px;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-button {
+      min-width: 120px;
+    }
+
+    .record-chip,
+    .status-chip {
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .record-chip {
+      background: rgba(212, 168, 67, 0.12);
+      color: var(--gold);
+    }
+
+    .status-chip.published,
+    .status-chip.confirmed,
+    .status-chip.complete {
+      background: rgba(46, 196, 169, 0.12);
+      color: var(--teal);
+    }
+
+    .status-chip.draft,
+    .status-chip.pending {
+      background: rgba(232, 113, 74, 0.12);
+      color: var(--coral);
+    }
+
+    .notice-card {
+      border-left: 4px solid var(--gold);
+    }
+
+    .notice-card.teal {
+      border-left-color: var(--teal);
+    }
+
+    .notice-card.green {
+      border-left-color: var(--green);
+    }
+
+    .product-card {
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--line-strong);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .product-meta,
+    .price-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .message-shell {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      min-height: 220px;
+      align-content: start;
+    }
+
+    .bubble {
+      max-width: 88%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .bubble.self {
+      margin-left: auto;
+      background: rgba(212, 168, 67, 0.14);
+      border-top-right-radius: 6px;
+    }
+
+    .bubble.system {
+      background: rgba(46, 196, 169, 0.12);
+      border-top-left-radius: 6px;
+    }
+
+    .message-entry {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .payment-row {
+      margin-bottom: 14px;
+    }
+
+    .summary-line {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .summary-line.total {
+      background: rgba(46, 196, 169, 0.08);
+      border-color: rgba(46, 196, 169, 0.3);
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    .timeline-shell {
+      padding: 16px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .timeline-item:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 22px;
+      bottom: -10px;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .timeline-item.complete::after {
+      background: rgba(46, 196, 169, 0.34);
+    }
+
+    .timeline-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--line-strong);
+      background: transparent;
+      margin-top: 2px;
+    }
+
+    .timeline-item.active .timeline-dot,
+    .timeline-item.complete .timeline-dot {
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .loading-box,
+    .empty-box {
+      min-height: 150px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--text-soft);
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .spinner,
+    .page-spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-top-color: var(--gold);
+      animation: spin 850ms linear infinite;
+    }
+
+    .page-spinner {
+      width: 44px;
+      height: 44px;
+      border-width: 4px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .page-loader,
+    .auth-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(4, 4, 4, 0.88);
+      backdrop-filter: blur(10px);
+    }
+
+    .page-loader.hidden,
+    .auth-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 180ms ease, visibility 180ms ease;
+    }
+
+    .loader-card,
+    .auth-card {
+      width: min(100%, 560px);
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .loader-card {
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .auth-card {
+      display: grid;
+      gap: 16px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 10px;
+    }
+
+    .auth-panel {
+      display: none;
+      gap: 14px;
+    }
+
+    .auth-panel.active {
+      display: grid;
+    }
+
+    .helper-note {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-alt);
+      color: var(--text-soft);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 760px) {
+      .app-shell {
+        padding: 20px 22px 28px;
+      }
+
+      .topbar-main {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+      }
+
+      .hero-grid {
+        grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.95fr);
+      }
+
+      .chart-grid,
+      .artisan-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .kpi-grid,
+      .notification-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1080px) {
+      .desktop-nav {
+        display: flex;
+      }
+
+      .mobile-nav {
+        display: none;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .pipeline-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .segment-grid,
+      .notification-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .product-grid,
+      .commerce-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1079px) {
+      .desktop-nav {
+        display: none;
+      }
+
+      .pipeline-step:not(:last-child)::after {
+        content: "v";
+        right: 50%;
+        top: auto;
+        bottom: -18px;
+        transform: translateX(50%);
+      }
+    }
+
+    @media (max-width: 759px) {
+      .stat-grid,
+      .metric-row {
+        grid-template-columns: 1fr;
+      }
+
+      .search-bar,
+      .message-entry {
+        display: grid;
+        grid-template-columns: 1fr auto;
+      }
+
+      .mobile-nav .nav-button {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="page-loader" class="page-loader">
+    <div class="loader-card">
+      <div class="page-spinner"></div>
+      <h2>Loading DHMB workspace</h2>
+      <p class="subtext">Fetching analytics, catalog records, account session, listings, orders, and message threads.</p>
+    </div>
+  </div>
+
+  <div id="auth-screen" class="auth-screen hidden">
+    <div class="auth-card">
+      <div>
+        <p class="eyebrow">Digital Handicraft Marketplace for Balochistan</p>
+        <h2>Login or create an account</h2>
+        <p class="subtext">The logged in account controls the displayed person name, role based actions, listings, orders, and message history.</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button id="login-tab" class="button primary" type="button">Login</button>
+        <button id="signup-tab" class="button" type="button">Sign Up</button>
+      </div>
+
+      <form id="login-panel" class="auth-panel active">
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" autocomplete="username">
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" autocomplete="current-password">
+        </div>
+        <button class="button primary" type="submit">Login</button>
+      </form>
+
+      <form id="signup-panel" class="auth-panel">
+        <div class="field-grid">
+          <div class="field">
+            <label for="signup-name">Full Name</label>
+            <input id="signup-name" type="text" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="signup-email">Email</label>
+            <input id="signup-email" type="email" autocomplete="email">
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <input id="signup-password" type="password" autocomplete="new-password">
+          </div>
+          <div class="field">
+            <label for="signup-role">Role</label>
+            <select id="signup-role">
+              <option value="buyer">Buyer</option>
+              <option value="artisan">Artisan</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="signup-district">District</label>
+          <select id="signup-district"></select>
+        </div>
+        <button class="button primary" type="submit">Create Account</button>
+      </form>
+
+      <div id="auth-feedback" class="helper-note">Create your own account or login with an existing one. After login the app shows the active user name and role based controls.</div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <header class="topbar panel">
+      <div class="topbar-main">
+        <div class="brand">
+          <div class="brand-mark">DH</div>
+          <div>
+            <p class="eyebrow">Digital Handicraft Marketplace for Balochistan</p>
+            <h1>DHMB marketplace workspace</h1>
+            <p>Live dashboards, accounts, listings, orders, and chat.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <div class="status-row">
+            <div class="live-pill"><span class="dot"></span>Hadoop Pipeline: LIVE</div>
+            <div id="api-status" class="status-pill degraded"><span class="dot"></span><span id="api-status-text">Loading API connections...</span></div>
+          </div>
+          <div class="pill-row">
+            <div id="user-pill" class="user-pill">No active session</div>
+            <button id="auth-trigger-button" class="button" type="button">Login / Sign Up</button>
+            <button id="theme-toggle" class="button primary" type="button">Light Mode</button>
+            <button id="refresh-button" class="button" type="button">Refresh</button>
+            <button id="install-button" class="button" type="button" hidden>Install</button>
+            <button id="logout-button" class="button" type="button">Logout</button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Desktop tabs">
+        <button class="nav-button" data-route="/admin" type="button">Dashboard</button>
+        <button class="nav-button" data-route="/artisan" type="button">Artisan</button>
+        <button class="nav-button" data-route="/buyer" type="button">Buyer</button>
+      </nav>
+    </header>
+
+    <div id="error-banner" class="error-banner"></div>
+
+    <main>
+      <section class="portal active" data-portal="/admin">
+        <div class="hero-grid">
+          <article class="hero-card panel">
+            <div class="section-head">
+              <div>
+                <h2>Admin dashboard</h2>
+                <p>Live analytics from your backend.</p>
+              </div>
+              <span id="pipeline-job" class="tone-chip">Loading job</span>
+            </div>
+            <div class="stat-grid">
+              <div class="mini-stat">
+                <div class="label">Logged In User</div>
+                <div id="admin-user-name" class="value">-</div>
+              <div class="stat-note">Current session.</div>
+              </div>
+              <div class="mini-stat">
+                <div class="label">Model Accuracy</div>
+                <div id="admin-accuracy" class="value">-</div>
+              <div class="stat-note">Forecast model.</div>
+              </div>
+              <div class="mini-stat">
+                <div class="label">Total Events</div>
+                <div id="admin-events" class="value">-</div>
+              <div class="stat-note">Live events.</div>
+              </div>
+              <div class="mini-stat">
+                <div class="label">Average Price</div>
+                <div id="admin-price" class="value">-</div>
+              <div class="stat-note">Average price.</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="section-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Pipeline status bar</h3>
+                <p>Bronze to model flow rendered from the pipeline endpoint.</p>
+              </div>
+            </div>
+            <div id="pipeline-grid" class="pipeline-grid">
+              <div class="loading-box">Loading pipeline data...</div>
+            </div>
+          </article>
+        </div>
+
+        <article class="section-card panel">
+          <div class="section-head">
+            <div>
+              <h3>Key performance indicators</h3>
+              <p>Metrics fetched from the KPI endpoint.</p>
+            </div>
+          </div>
+          <div id="kpi-grid" class="kpi-grid"></div>
+        </article>
+
+        <div class="chart-grid">
+          <article class="chart-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Demand by category</h3>
+                <p>Category event totals sourced from the demand endpoint.</p>
+              </div>
+            </div>
+            <canvas id="demand-chart" height="320"></canvas>
+          </article>
+
+          <article class="chart-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Price optimization ranges</h3>
+                <p>Minimum and maximum recommended prices for each category.</p>
+              </div>
+            </div>
+            <canvas id="price-chart" height="320"></canvas>
+          </article>
+        </div>
+
+        <div class="chart-grid">
+          <article class="chart-card panel">
+            <div class="section-head">
+              <div>
+                <h3>District demand heatmap</h3>
+                <p>Horizontal district demand ranking by total purchases.</p>
+              </div>
+            </div>
+            <canvas id="district-chart" height="320"></canvas>
+          </article>
+
+          <article class="chart-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Global buyer regions</h3>
+                <p>Buyer regions from the live buyer dataset.</p>
+              </div>
+            </div>
+            <canvas id="buyer-chart" height="320"></canvas>
+          </article>
+        </div>
+
+        <article class="table-card panel">
+          <div class="section-head">
+            <div>
+              <h3>MapReduce silver layer results</h3>
+              <p>Sortable analytics records from the top products endpoint.</p>
+            </div>
+          </div>
+          <div class="table-shell">
+            <table>
+              <thead>
+                <tr>
+                  <th><button class="sort-button" data-sort-key="category" type="button">Category <span class="sort-mark" data-sort-indicator="category"></span></button></th>
+                  <th><button class="sort-button" data-sort-key="district" type="button">District <span class="sort-mark" data-sort-indicator="district"></span></button></th>
+                  <th><button class="sort-button" data-sort-key="total_events" type="button">Total Events <span class="sort-mark" data-sort-indicator="total_events"></span></button></th>
+                  <th><button class="sort-button" data-sort-key="avg_price_pkr" type="button">Avg Price PKR <span class="sort-mark" data-sort-indicator="avg_price_pkr"></span></button></th>
+                  <th><button class="sort-button" data-sort-key="total_purchases" type="button">Purchases <span class="sort-mark" data-sort-indicator="total_purchases"></span></button></th>
+                  <th><button class="sort-button" data-sort-key="top_buyer_region" type="button">Top Buyer Region <span class="sort-mark" data-sort-indicator="top_buyer_region"></span></button></th>
+                </tr>
+              </thead>
+              <tbody id="results-table"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="section-card panel">
+          <div class="section-head">
+            <div>
+              <h3>Buyer segments</h3>
+              <p>Cluster counts, prices, and purchases from the segmentation endpoint.</p>
+            </div>
+          </div>
+          <div id="segment-grid" class="segment-grid"></div>
+        </article>
+
+        <article class="section-card panel">
+          <div class="section-head">
+            <div>
+              <h3>ML model accuracy bars</h3>
+              <p>Current confidence levels for forecasting, pricing, and clustering.</p>
+            </div>
+          </div>
+          <div id="model-grid" class="progress-stack"></div>
+        </article>
+      </section>
+
+      <section class="portal" data-portal="/artisan">
+        <article class="hero-card panel">
+          <div class="section-head">
+            <div>
+              <h2 id="artisan-welcome">Welcome</h2>
+              <p>Use your account to manage listings, update status, and track buyer activity.</p>
+            </div>
+            <div id="earnings-pill" class="badge-pill">PKR 0 this month</div>
+          </div>
+        </article>
+
+        <article class="section-card panel">
+          <div class="section-head">
+            <div>
+              <h3>Operational notifications</h3>
+              <p>Orders, pricing, and inventory.</p>
+            </div>
+          </div>
+          <div id="notification-grid" class="notification-grid"></div>
+        </article>
+
+        <div class="artisan-grid">
+          <article class="section-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Product listing form</h3>
+                <p>Create and manage your listings.</p>
+              </div>
+            </div>
+            <form id="listing-form" class="form-shell">
+              <input id="listing-id" type="hidden">
+              <div class="field">
+                <label for="listing-name">Product Name</label>
+                <input id="listing-name" type="text" placeholder="Product name">
+              </div>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="listing-category">Category</label>
+                  <select id="listing-category"></select>
+                </div>
+                <div class="field">
+                  <label for="listing-price">Price PKR</label>
+                  <input id="listing-price" type="number" min="0" step="1" placeholder="Recommended price appears here">
+                </div>
+              </div>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="listing-district">District</label>
+                  <select id="listing-district"></select>
+                </div>
+                <div class="field">
+                  <label for="listing-status">Status</label>
+                  <select id="listing-status">
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="listing-description">Description</label>
+                <textarea id="listing-description" placeholder="Describe the product, material, and delivery readiness."></textarea>
+              </div>
+              <div class="button-row">
+                <button class="button primary" type="submit">Save Listing</button>
+                <button id="listing-reset" class="button" type="button">Reset Form</button>
+              </div>
+              <div id="listing-feedback" class="field-note">Choose a category to load the recommended price range.</div>
+            </form>
+          </article>
+
+          <div class="chart-grid">
+            <article class="section-card panel">
+              <div class="section-head">
+                <div>
+                  <h3>AI price suggestions</h3>
+                  <p>Live price ranges.</p>
+                </div>
+              </div>
+              <div id="suggestions-box"></div>
+            </article>
+
+            <article class="chart-card panel">
+              <div class="section-head">
+                <div>
+                  <h3>Weekly earnings</h3>
+                  <p>Weekly totals.</p>
+                </div>
+              </div>
+              <canvas id="earnings-chart" height="280"></canvas>
+            </article>
+          </div>
+        </div>
+
+        <article class="table-card panel">
+          <div class="section-head">
+            <div>
+              <h3>My listings</h3>
+              <p>Your listing records.</p>
+            </div>
+          </div>
+          <div class="table-shell">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>District</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="listings-table"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="portal" data-portal="/buyer">
+        <article class="hero-card panel">
+          <div class="section-head">
+            <div>
+              <h2>Authentic Balochi Handicrafts</h2>
+              <p>Browse, chat, and order.</p>
+            </div>
+          </div>
+          <div class="search-row">
+            <div class="search-bar">
+              <input id="buyer-search" class="search-input" type="search" placeholder="Search by product, category, district, or seller">
+              <button id="buyer-search-button" class="button primary search-button" type="button">Search</button>
+            </div>
+            <div id="buyer-filters" class="filter-row"></div>
+          </div>
+          <div class="pill-row">
+            <div class="filter-pill">Secure Checkout</div>
+            <div class="filter-pill">Verified Artisans</div>
+            <div class="filter-pill">TCS Delivery</div>
+          </div>
+        </article>
+
+        <article class="section-card panel">
+          <div class="section-head">
+            <div>
+              <h3>Marketplace catalog</h3>
+              <p>Live published listings.</p>
+            </div>
+          </div>
+          <div id="product-grid" class="product-grid"></div>
+        </article>
+
+        <div class="commerce-grid">
+          <article class="commerce-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Chat widget</h3>
+                <p>Stored chat with auto reply.</p>
+              </div>
+            </div>
+            <div class="record-head" style="margin-bottom:14px;">
+              <div>
+                <strong id="chat-title">Select a listing</strong>
+                <div id="chat-subtitle" class="message-meta">Open a catalog record to start a conversation.</div>
+              </div>
+              <div id="chat-listing-chip" class="record-chip">No thread</div>
+            </div>
+            <div id="chat-stream" class="message-shell"></div>
+            <div class="message-entry">
+              <input id="chat-input" class="message-input" type="text" placeholder="Type your message">
+              <button id="chat-send" class="button primary" type="button">Send</button>
+            </div>
+          </article>
+
+          <article class="commerce-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Checkout</h3>
+                  <p>Order the selected listing.</p>
+              </div>
+            </div>
+            <div id="payment-row" class="payment-row"></div>
+            <div id="checkout-summary"></div>
+            <button id="place-order" class="button primary" type="button">Place Order Securely</button>
+            <div id="checkout-feedback" class="field-note">Select a product card to prepare checkout.</div>
+          </article>
+
+          <article class="commerce-card panel">
+            <div class="section-head">
+              <div>
+                <h3>Order tracking</h3>
+                <p>Latest order status.</p>
+              </div>
+            </div>
+            <div class="timeline-shell">
+              <div class="record-head" style="margin-bottom:10px;">
+                <div>
+                  <div class="label">Tracking ID</div>
+                  <div id="tracking-id" class="value" style="font-size:1.3rem;">No order</div>
+                </div>
+                <div id="tracking-status" class="status-chip pending">Pending</div>
+              </div>
+              <div id="tracking-copy" class="field-note">Place an order to create a live tracking record.</div>
+              <div id="tracking-timeline" class="timeline"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Mobile tabs">
+    <button class="nav-button" data-route="/admin" type="button">Dashboard</button>
+    <button class="nav-button" data-route="/artisan" type="button">Artisan</button>
+    <button class="nav-button" data-route="/buyer" type="button">Buyer</button>
+  </nav>
+
+  <script>
+    const API_BASE = "http://localhost:5000";
+    const THEME_KEY = "dhmb-theme";
+    const ROUTES = new Set(["/admin", "/artisan", "/buyer"]);
+    const DEFAULT_ROUTE = "/admin";
+    const DISTRICTS = ["Chaman", "Gwadar", "Kalat", "Khuzdar", "Nushki", "Panjgur", "Quetta", "Sibbi", "Turbat", "Zhob"];
+    const FILTERS = ["All", "Embroidery", "Gemstones", "Carpets", "Marble", "Pottery", "Under PKR 3000", "Published Only"];
+    const PAYMENT_METHODS = ["Stripe", "JazzCash", "EasyPaisa", "PayPal"];
+    const state = {
+      route: DEFAULT_ROUTE,
+      theme: "dark",
+      installPrompt: null,
+      sortKey: "total_events",
+      sortDir: "desc",
+      buyerSearch: "",
+      buyerFilter: "All",
+      selectedPayment: "Stripe",
+      selectedListingId: "",
+      user: null,
+      summary: null,
+      authMode: "login",
+      data: {
+        pipeline: null,
+        kpis: null,
+        demand: [],
+        districts: [],
+        priceOptimization: [],
+        segments: [],
+        buyers: [],
+        topProducts: [],
+        catalog: [],
+        myListings: [],
+        orders: [],
+        messages: []
+      },
+      charts: {}
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function humanize(value) {
+      return String(value ?? "").replaceAll("_", " ");
+    }
+
+    function formatNumber(value) {
+      if (value == null || Number.isNaN(Number(value))) return "-";
+      return new Intl.NumberFormat("en-US").format(Number(value));
+    }
+
+    function formatCompact(value) {
+      if (value == null || Number.isNaN(Number(value))) return "-";
+      return new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(Number(value));
+    }
+
+    function formatCurrency(value) {
+      if (value == null || Number.isNaN(Number(value))) return "-";
+      return "PKR " + new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(Number(value));
+    }
+
+    function normalizeRoute(pathname) {
+      if (!pathname || pathname === "/") return DEFAULT_ROUTE;
+      return ROUTES.has(pathname) ? pathname : DEFAULT_ROUTE;
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(API_BASE + path, {
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        },
+        ...options
+      });
+
+      if (response.status === 204) {
+        return null;
+      }
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || (path + " returned " + response.status));
+      }
+      return data;
+    }
+
+    function getCss(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function chartPalette() {
+      return {
+        gold: getCss("--gold"),
+        teal: getCss("--teal"),
+        coral: getCss("--coral"),
+        purple: getCss("--purple"),
+        text: getCss("--text"),
+        muted: getCss("--muted"),
+        line: getCss("--line")
+      };
+    }
+
+    function chartOptions(extra = {}) {
+      const palette = chartPalette();
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: palette.text,
+              boxWidth: 12,
+              usePointStyle: true,
+              padding: 16
+            }
+          },
+          tooltip: {
+            backgroundColor: getCss("--surface-strong"),
+            titleColor: palette.text,
+            bodyColor: palette.text,
+            borderColor: palette.line,
+            borderWidth: 1
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: palette.muted },
+            grid: { color: palette.line, drawBorder: false }
+          },
+          y: {
+            ticks: { color: palette.muted },
+            grid: { color: palette.line, drawBorder: false }
+          }
+        },
+        ...extra
+      };
+    }
+
+    function destroyCharts() {
+      Object.values(state.charts).forEach((chart) => {
+        if (chart) chart.destroy();
+      });
+      state.charts = {};
+    }
+
+    function setTheme(theme) {
+      state.theme = theme;
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem(THEME_KEY, theme);
+      document.getElementById("theme-toggle").textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+      document.querySelector('meta[name="theme-color"]').setAttribute("content", theme === "dark" ? "#040404" : "#f5f0e5");
+      renderCharts();
+    }
+
+    function showError(message) {
+      const banner = document.getElementById("error-banner");
+      banner.style.display = message ? "block" : "none";
+      banner.textContent = message || "";
+    }
+
+    function setApiStatus(mode, text) {
+      const pill = document.getElementById("api-status");
+      pill.className = "status-pill " + mode;
+      document.getElementById("api-status-text").textContent = text;
+    }
+
+    function setRoute(path, push = true) {
+      const route = normalizeRoute(path);
+      state.route = route;
+      if (window.location.pathname !== route) {
+        window.history[push ? "pushState" : "replaceState"]({}, "", route);
+      }
+      document.querySelectorAll("[data-portal]").forEach((portal) => {
+        portal.classList.toggle("active", portal.dataset.portal === route);
+      });
+      document.querySelectorAll(".nav-button[data-route]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.route === route);
+      });
+      document.title = route === "/admin"
+        ? "DHMB | Admin Dashboard"
+        : route === "/artisan"
+          ? "DHMB | Artisan Portal"
+          : "DHMB | Buyer Portal";
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function setAuthMode(mode) {
+      state.authMode = mode;
+      document.getElementById("login-tab").classList.toggle("primary", mode === "login");
+      document.getElementById("signup-tab").classList.toggle("primary", mode === "signup");
+      document.getElementById("login-panel").classList.toggle("active", mode === "login");
+      document.getElementById("signup-panel").classList.toggle("active", mode === "signup");
+    }
+
+    function toggleAuthScreen(show) {
+      document.getElementById("auth-screen").classList.toggle("hidden", !show);
+    }
+
+    function activePriceSuggestion(category) {
+      return state.data.priceOptimization.find((item) => item.category === category) || state.data.priceOptimization[0] || null;
+    }
+
+    function selectedListing() {
+      return state.data.catalog.find((item) => item.id === state.selectedListingId) || state.data.catalog[0] || null;
+    }
+
+    function latestOrder() {
+      if (!state.data.orders.length) return null;
+      return [...state.data.orders].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0];
+    }
+
+    function roleCanEditListings() {
+      return state.user && (state.user.role === "artisan" || state.user.role === "admin");
+    }
+
+    function roleCanPlaceOrder() {
+      return state.user && (state.user.role === "buyer" || state.user.role === "admin");
+    }
+
+    function renderUserBar() {
+      const pill = document.getElementById("user-pill");
+      const authButton = document.getElementById("auth-trigger-button");
+      const logoutButton = document.getElementById("logout-button");
+      if (!state.user) {
+        pill.textContent = "No active session";
+        authButton.textContent = "Login / Sign Up";
+        authButton.classList.add("primary");
+        logoutButton.hidden = true;
+        document.getElementById("admin-user-name").textContent = "-";
+        document.getElementById("artisan-welcome").textContent = "Welcome";
+        document.getElementById("earnings-pill").textContent = "PKR 0 this month";
+        return;
+      }
+
+      pill.textContent = state.user.full_name + " | " + state.user.role.toUpperCase();
+      authButton.textContent = "Switch Account";
+      authButton.classList.remove("primary");
+      logoutButton.hidden = false;
+      document.getElementById("admin-user-name").textContent = state.user.full_name;
+      document.getElementById("artisan-welcome").textContent = "Welcome " + state.user.full_name;
+      const monthly = state.summary?.monthly_earnings || 0;
+      document.getElementById("earnings-pill").textContent = formatCurrency(monthly) + " this month";
+    }
+
+    function renderPipeline() {
+      const root = document.getElementById("pipeline-grid");
+      const pipeline = state.data.pipeline;
+      if (!pipeline) {
+        root.innerHTML = '<div class="empty-box">Pipeline data is unavailable.</div>';
+        document.getElementById("pipeline-job").textContent = "Pipeline unavailable";
+        return;
+      }
+
+      document.getElementById("pipeline-job").textContent = pipeline.mapreduce.job;
+      const steps = [
+        {
+          tone: "bronze",
+          tag: "BR",
+          title: "Bronze Layer",
+          meta: formatCompact(pipeline.bronze.rows) + " rows",
+          size: pipeline.bronze.size_mb + "MB",
+          copy: pipeline.bronze.description
+        },
+        {
+          tone: "silver",
+          tag: "SI",
+          title: "Silver Layer",
+          meta: formatNumber(pipeline.silver.rows) + " rows",
+          size: pipeline.silver.size_kb + "KB",
+          copy: pipeline.silver.description
+        },
+        {
+          tone: "gold",
+          tag: "GO",
+          title: "Gold Layer",
+          meta: pipeline.gold.datasets + " datasets",
+          size: pipeline.gold.size_mb + "MB",
+          copy: pipeline.gold.description
+        },
+        {
+          tone: "model",
+          tag: "ML",
+          title: "ML Models",
+          meta: Number(pipeline.ml_models.accuracy).toFixed(2) + "% accuracy",
+          size: "Live",
+          copy: pipeline.ml_models.description
+        }
+      ];
+
+      root.innerHTML = steps.map((step) => `
+        <div class="pipeline-step">
+          <div class="pipeline-top">
+            <div class="pipeline-tag ${step.tone}">${escapeHtml(step.tag)}</div>
+            <div>
+              <strong>${escapeHtml(step.title)}</strong>
+              <div class="message-meta">${escapeHtml(step.meta)}</div>
+            </div>
+          </div>
+          <div class="size-chip">${escapeHtml(step.size)}</div>
+          <div class="panel-copy">${escapeHtml(step.copy)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderHeroStats() {
+      const kpis = state.data.kpis;
+      const pipeline = state.data.pipeline;
+      document.getElementById("admin-accuracy").textContent = pipeline ? Number(pipeline.ml_models.accuracy).toFixed(2) + "%" : "-";
+      document.getElementById("admin-events").textContent = kpis ? formatCompact(kpis.total_events) : "-";
+      document.getElementById("admin-price").textContent = kpis ? formatCurrency(kpis.avg_price_pkr) : "-";
+    }
+
+    function renderKpis() {
+      const root = document.getElementById("kpi-grid");
+      const kpis = state.data.kpis;
+      if (!kpis) {
+        root.innerHTML = '<div class="empty-box">KPI data is unavailable.</div>';
+        return;
+      }
+
+      const cards = [
+        { tone: "", title: "Total Events", value: formatCompact(kpis.total_events), note: "Fetched from total_events." },
+        { tone: "teal", title: "XGBoost Accuracy", value: Number(kpis.accuracy).toFixed(2) + "%", note: "Fetched from accuracy." },
+        { tone: "coral", title: "Total Purchases", value: formatNumber(kpis.total_purchases), note: "Fetched from total_purchases." },
+        { tone: "purple", title: "Income Increase", value: "+" + formatNumber(kpis.income_increase) + "%", note: "Fetched from income_increase." }
+      ];
+
+      root.innerHTML = cards.map((card, index) => `
+        <article class="kpi-card ${card.tone}">
+          <div class="card-head">
+            <span class="card-key">KPI 0${index + 1}</span>
+            <span class="tone-chip">${escapeHtml(card.title)}</span>
+          </div>
+          <div class="value">${escapeHtml(card.value)}</div>
+          <div class="panel-copy">${escapeHtml(card.note)}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderTopProducts() {
+      const body = document.getElementById("results-table");
+      const rows = [...state.data.topProducts];
+      if (!rows.length) {
+        body.innerHTML = '<tr><td colspan="6">No silver layer records are available.</td></tr>';
+        return;
+      }
+
+      rows.sort((a, b) => {
+        const left = a[state.sortKey];
+        const right = b[state.sortKey];
+        if (typeof left === "number" && typeof right === "number") {
+          return state.sortDir === "asc" ? left - right : right - left;
+        }
+        return state.sortDir === "asc"
+          ? String(left).localeCompare(String(right))
+          : String(right).localeCompare(String(left));
+      });
+
+      document.querySelectorAll("[data-sort-indicator]").forEach((el) => {
+        el.textContent = el.dataset.sortIndicator === state.sortKey ? (state.sortDir === "asc" ? "^" : "v") : "";
+      });
+
+      body.innerHTML = rows.map((row) => `
+        <tr>
+          <td><span class="record-chip">${escapeHtml(humanize(row.category))}</span></td>
+          <td>${escapeHtml(row.district)}</td>
+          <td>${formatNumber(row.total_events)}</td>
+          <td>${formatCurrency(row.avg_price_pkr)}</td>
+          <td>${formatNumber(row.total_purchases)}</td>
+          <td>${escapeHtml(row.top_buyer_region)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderSegments() {
+      const root = document.getElementById("segment-grid");
+      if (!state.data.segments.length) {
+        root.innerHTML = '<div class="empty-box">Segment data is unavailable.</div>';
+        return;
+      }
+
+      root.innerHTML = state.data.segments.map((item) => `
+        <article class="segment-card">
+          <div class="record-head">
+            <div>
+              <strong>${escapeHtml(humanize(item.segment_name))}</strong>
+              <div class="message-meta">Segment output from the clustering model.</div>
+            </div>
+            <div class="tone-chip">${formatNumber(item.count)} records</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-box">
+              <div class="label">Count</div>
+              <div><strong>${formatNumber(item.count)}</strong></div>
+            </div>
+            <div class="metric-box">
+              <div class="label">Avg Price</div>
+              <div><strong>${formatCurrency(item.avg_price)}</strong></div>
+            </div>
+            <div class="metric-box">
+              <div class="label">Purchases</div>
+              <div><strong>${formatNumber(item.total_purchases)}</strong></div>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderModelBars() {
+      const root = document.getElementById("model-grid");
+      const accuracy = Number(state.data.kpis?.accuracy || state.data.pipeline?.ml_models?.accuracy || 82.93);
+      const models = [
+        {
+          title: "XGBoost Demand Forecasting",
+          value: accuracy,
+          color: getCss("--teal"),
+          copy: "Forecasts demand using live category, district, and buyer context."
+        },
+        {
+          title: "Price Optimization",
+          value: 90,
+          color: getCss("--gold"),
+          copy: "Recommends category level pricing bands for stronger seller outcomes."
+        },
+        {
+          title: "K Means Segmentation",
+          value: 87,
+          color: getCss("--purple"),
+          copy: "Clusters marketplace buyers by price and purchase behavior."
+        }
+      ];
+
+      root.innerHTML = models.map((item) => `
+        <div class="progress-card">
+          <div class="progress-head">
+            <span>${escapeHtml(item.title)}</span>
+            <span>${Number(item.value).toFixed(2).replace(".00", "")}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${item.value}%; background:${item.color};"></div>
+          </div>
+          <div class="panel-copy">${escapeHtml(item.copy)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderNotifications() {
+      const root = document.getElementById("notification-grid");
+      const recommendation = activePriceSuggestion("Balochi_Embroidery");
+      const orders = state.data.orders || [];
+      const listings = state.data.myListings || [];
+      const latest = latestOrder();
+      const cards = [
+        {
+          tone: "",
+          title: "Order Update",
+          copy: orders.length
+            ? "Latest linked order status is " + latest.status.replaceAll("_", " ") + " for " + latest.listing_name + "."
+            : "No live orders are linked to the current account yet."
+        },
+        {
+          tone: "teal",
+          title: "Price Alert",
+          copy: recommendation
+            ? "Balochi Embroidery is currently optimized between " + formatCurrency(recommendation.optimal_min) + " and " + formatCurrency(recommendation.optimal_max) + "."
+            : "Price optimization data is not available."
+        },
+        {
+          tone: "green",
+          title: "Inventory Status",
+          copy: listings.length
+            ? "You currently manage " + listings.length + " listing records in this account."
+            : "No listing records belong to this account yet."
+        }
+      ];
+
+      root.innerHTML = cards.map((item) => `
+        <article class="notice-card ${item.tone}">
+          <div class="record-head">
+            <strong>${escapeHtml(item.title)}</strong>
+            <span class="tone-chip">Live</span>
+          </div>
+          <div class="panel-copy">${escapeHtml(item.copy)}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderSuggestionBox() {
+      const root = document.getElementById("suggestions-box");
+      if (!state.data.priceOptimization.length) {
+        root.innerHTML = '<div class="empty-box">Pricing suggestions are unavailable.</div>';
+        return;
+      }
+
+      root.innerHTML = `
+        <div class="form-shell">
+          ${state.data.priceOptimization.map((item) => `
+            <div class="metric-box">
+              <div class="record-head">
+                <strong>${escapeHtml(humanize(item.category))}</strong>
+                <span class="status-chip published">Range</span>
+              </div>
+              <div class="price-line" style="margin-top:8px;">
+                <span>${formatCurrency(item.optimal_min)}</span>
+                <span>${formatCurrency(item.optimal_max)}</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function populateListingFields(listing = null) {
+      document.getElementById("listing-id").value = listing?.id || "";
+      document.getElementById("listing-name").value = listing?.product_name || "";
+      document.getElementById("listing-category").value = listing?.category || state.data.priceOptimization[0]?.category || "";
+      document.getElementById("listing-price").value = listing?.price || "";
+      document.getElementById("listing-district").value = listing?.district || state.user?.district || DISTRICTS[0];
+      document.getElementById("listing-status").value = listing?.status || "published";
+      document.getElementById("listing-description").value = listing?.description || "";
+      syncRecommendedPrice();
+    }
+
+    function syncRecommendedPrice() {
+      const category = document.getElementById("listing-category").value;
+      const recommendation = activePriceSuggestion(category);
+      if (!recommendation) {
+        document.getElementById("listing-feedback").textContent = "Price recommendations are unavailable.";
+        return;
+      }
+      const midpoint = Math.round((Number(recommendation.optimal_min) + Number(recommendation.optimal_max)) / 2);
+      if (!document.getElementById("listing-id").value && !document.getElementById("listing-price").value) {
+        document.getElementById("listing-price").value = midpoint;
+      }
+      document.getElementById("listing-feedback").textContent =
+        "Recommended range for " + humanize(category) + " is " + formatCurrency(recommendation.optimal_min) +
+        " to " + formatCurrency(recommendation.optimal_max) + ".";
+    }
+
+    function renderListingControls() {
+      const categorySelect = document.getElementById("listing-category");
+      const districtSelect = document.getElementById("listing-district");
+      const categories = state.data.priceOptimization.map((item) => item.category);
+      categorySelect.innerHTML = categories.map((category) => `
+        <option value="${escapeHtml(category)}">${escapeHtml(humanize(category))}</option>
+      `).join("");
+      districtSelect.innerHTML = DISTRICTS.map((district) => `
+        <option value="${escapeHtml(district)}">${escapeHtml(district)}</option>
+      `).join("");
+      document.getElementById("signup-district").innerHTML = districtSelect.innerHTML;
+      populateListingFields();
+    }
+
+    function renderMyListings() {
+      const body = document.getElementById("listings-table");
+      const listings = state.data.myListings || [];
+      if (!state.user) {
+        body.innerHTML = '<tr><td colspan="6">Login to manage listings.</td></tr>';
+        return;
+      }
+      if (!listings.length) {
+        body.innerHTML = '<tr><td colspan="6">No listings belong to this account yet.</td></tr>';
+        return;
+      }
+      body.innerHTML = listings.map((item) => `
+        <tr>
+          <td>${escapeHtml(item.product_name)}</td>
+          <td><span class="record-chip">${escapeHtml(humanize(item.category))}</span></td>
+          <td>${escapeHtml(item.district)}</td>
+          <td>${formatCurrency(item.price)}</td>
+          <td><span class="status-chip ${escapeHtml(item.status)}">${escapeHtml(item.status)}</span></td>
+          <td>
+            <div class="button-row">
+              <button class="mini-button" data-edit-listing="${escapeHtml(item.id)}" type="button">Edit</button>
+              <button class="mini-button" data-delete-listing="${escapeHtml(item.id)}" type="button">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function filteredCatalog() {
+      return state.data.catalog.filter((item) => {
+        const query = state.buyerSearch.trim().toLowerCase();
+        const haystack = [
+          item.product_name,
+          item.category,
+          item.district,
+          item.owner_name
+        ].join(" ").toLowerCase();
+        if (query && !haystack.includes(query)) return false;
+        if (state.buyerFilter === "All") return true;
+        if (state.buyerFilter === "Embroidery") return item.category === "Balochi_Embroidery";
+        if (state.buyerFilter === "Gemstones") return item.category === "Gemstones";
+        if (state.buyerFilter === "Carpets") return item.category === "Hand_Woven_Carpet";
+        if (state.buyerFilter === "Marble") return item.category === "Marble_Craft";
+        if (state.buyerFilter === "Pottery") return item.category === "Pottery";
+        if (state.buyerFilter === "Under PKR 3000") return Number(item.price) <= 3000;
+        if (state.buyerFilter === "Published Only") return item.status === "published";
+        return true;
+      });
+    }
+
+    function renderBuyerFilters() {
+      const root = document.getElementById("buyer-filters");
+      root.innerHTML = FILTERS.map((label) => `
+        <button class="chip-button ${state.buyerFilter === label ? "active" : ""}" data-filter="${escapeHtml(label)}" type="button">${escapeHtml(label)}</button>
+      `).join("");
+    }
+
+    function renderCatalog() {
+      const root = document.getElementById("product-grid");
+      const items = filteredCatalog();
+      if (!items.length) {
+        root.innerHTML = '<div class="empty-box">No catalog listings match the current search and filter.</div>';
+        return;
+      }
+
+      root.innerHTML = items.map((item) => `
+        <article class="product-card">
+          <div class="record-head">
+            <div>
+              <strong>${escapeHtml(item.product_name)}</strong>
+              <div class="message-meta">${escapeHtml(item.owner_name)} | ${escapeHtml(item.district)}</div>
+            </div>
+            <span class="status-chip ${escapeHtml(item.status)}">${escapeHtml(item.status)}</span>
+          </div>
+          <div class="price-line" style="margin-top:10px;">
+            <span>${formatCurrency(item.price)}</span>
+            <span>${escapeHtml(humanize(item.category))}</span>
+          </div>
+          <div class="panel-copy">Orders linked: ${formatNumber(item.order_count)} | Latest status: ${escapeHtml(item.latest_order_status.replaceAll("_", " "))}</div>
+          <div class="button-row" style="margin-top:12px;">
+            <button class="button primary" data-select-listing="${escapeHtml(item.id)}" type="button">Select</button>
+            <button class="button" data-chat-listing="${escapeHtml(item.id)}" type="button">Open Chat</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderChat() {
+      const stream = document.getElementById("chat-stream");
+      const listing = selectedListing();
+      document.getElementById("chat-title").textContent = listing ? listing.product_name : "Select a listing";
+      document.getElementById("chat-subtitle").textContent = listing
+        ? listing.owner_name + " | " + listing.district
+        : "Open a catalog record to start a conversation.";
+      document.getElementById("chat-listing-chip").textContent = listing ? humanize(listing.category) : "No thread";
+
+      if (!state.user) {
+        stream.innerHTML = '<div class="empty-box">Login to use persisted chat threads.</div>';
+        return;
+      }
+
+      if (!listing) {
+        stream.innerHTML = '<div class="empty-box">Select a published listing to load messages.</div>';
+        return;
+      }
+
+      if (!state.data.messages.length) {
+        stream.innerHTML = '<div class="empty-box">No messages yet. Send a message and the system will respond.</div>';
+        return;
+      }
+
+      stream.innerHTML = state.data.messages.map((message) => `
+        <div class="bubble ${message.sender_type === "system" ? "system" : "self"}">
+          <strong>${escapeHtml(message.sender_name)}</strong><br>
+          ${escapeHtml(message.text)}
+        </div>
+      `).join("");
+    }
+
+    function renderCheckout() {
+      const row = document.getElementById("payment-row");
+      const summary = document.getElementById("checkout-summary");
+      const listing = selectedListing();
+      row.innerHTML = PAYMENT_METHODS.map((method) => `
+        <button class="chip-button ${state.selectedPayment === method ? "active" : ""}" data-payment="${escapeHtml(method)}" type="button">${escapeHtml(method)}</button>
+      `).join("");
+
+      if (!listing) {
+        summary.innerHTML = '<div class="empty-box">Select a catalog listing to prepare checkout.</div>';
+        document.getElementById("checkout-feedback").textContent = "Select a product card to prepare checkout.";
+        return;
+      }
+
+      const shipping = 450;
+      const serviceFee = 120;
+      const total = Number(listing.price) + shipping + serviceFee;
+      summary.innerHTML = `
+        <div class="summary-line"><span>Item</span><span>${escapeHtml(listing.product_name)}</span></div>
+        <div class="summary-line"><span>Seller</span><span>${escapeHtml(listing.owner_name)}</span></div>
+        <div class="summary-line"><span>Subtotal</span><span>${formatCurrency(listing.price)}</span></div>
+        <div class="summary-line"><span>TCS Shipping</span><span>${formatCurrency(shipping)}</span></div>
+        <div class="summary-line"><span>Secure Service Fee</span><span>${formatCurrency(serviceFee)}</span></div>
+        <div class="summary-line total"><span>Total</span><span>${formatCurrency(total)}</span></div>
+      `;
+      document.getElementById("checkout-feedback").textContent = roleCanPlaceOrder()
+        ? "Ready to place an order for the selected listing."
+        : "Buyer or admin access is required to place an order.";
+    }
+
+    function renderTracking() {
+      const order = latestOrder();
+      document.getElementById("tracking-id").textContent = order ? order.tracking_id : "No order";
+      document.getElementById("tracking-status").textContent = order ? order.status.replaceAll("_", " ") : "Pending";
+      document.getElementById("tracking-status").className = "status-chip " + (order ? order.status : "pending");
+      document.getElementById("tracking-copy").textContent = order
+        ? "Latest order for " + order.listing_name + " using " + order.payment_method + "."
+        : "Place an order to generate a tracking record.";
+
+      const root = document.getElementById("tracking-timeline");
+      if (!order || !order.tracking_timeline?.length) {
+        root.innerHTML = "";
+        return;
+      }
+      root.innerHTML = order.tracking_timeline.map((item) => `
+        <div class="timeline-item ${escapeHtml(item.state)}">
+          <div class="timeline-dot"></div>
+          <div>
+            <strong>${escapeHtml(item.label)}</strong>
+            <div class="message-meta">${escapeHtml(item.note)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderCharts() {
+      if (typeof Chart === "undefined") return;
+
+      destroyCharts();
+      const palette = chartPalette();
+
+      if (state.data.demand.length) {
+        state.charts.demand = new Chart(document.getElementById("demand-chart"), {
+          type: "bar",
+          data: {
+            labels: state.data.demand.map((item) => humanize(item.category)),
+            datasets: [{
+              label: "Total Events",
+              data: state.data.demand.map((item) => item.total_events),
+              backgroundColor: [palette.gold, palette.teal, palette.coral, palette.purple, "#4ade80", "#38bdf8", "#f59e0b", "#ef4444"],
+              borderRadius: 8,
+              borderSkipped: false
+            }]
+          },
+          options: chartOptions({
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: palette.muted }, grid: { display: false } },
+              y: { ticks: { color: palette.muted }, grid: { color: palette.line } }
+            }
+          })
+        });
+      }
+
+      if (state.data.priceOptimization.length) {
+        state.charts.price = new Chart(document.getElementById("price-chart"), {
+          type: "bar",
+          data: {
+            labels: state.data.priceOptimization.map((item) => humanize(item.category)),
+            datasets: [
+              {
+                label: "Optimal Min",
+                data: state.data.priceOptimization.map((item) => item.optimal_min),
+                backgroundColor: "rgba(46, 196, 169, 0.78)",
+                borderRadius: 8,
+                borderSkipped: false
+              },
+              {
+                label: "Optimal Max",
+                data: state.data.priceOptimization.map((item) => item.optimal_max),
+                backgroundColor: "rgba(212, 168, 67, 0.82)",
+                borderRadius: 8,
+                borderSkipped: false
+              }
+            ]
+          },
+          options: chartOptions()
+        });
+      }
+
+      if (state.data.districts.length) {
+        state.charts.district = new Chart(document.getElementById("district-chart"), {
+          type: "bar",
+          data: {
+            labels: state.data.districts.map((item) => item.district),
+            datasets: [{
+              label: "Total Purchases",
+              data: state.data.districts.map((item) => item.total_purchases),
+              backgroundColor: "rgba(46, 196, 169, 0.82)",
+              borderRadius: 8,
+              borderSkipped: false
+            }]
+          },
+          options: chartOptions({
+            indexAxis: "y",
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: palette.muted }, grid: { color: palette.line } },
+              y: { ticks: { color: palette.muted }, grid: { display: false } }
+            }
+          })
+        });
+      }
+
+      if (state.data.buyers.length) {
+        state.charts.buyers = new Chart(document.getElementById("buyer-chart"), {
+          type: "doughnut",
+          data: {
+            labels: state.data.buyers.map((item) => item.top_buyer_region),
+            datasets: [{
+              data: state.data.buyers.map((item) => item.total_purchases),
+              backgroundColor: [palette.gold, palette.teal, palette.coral, palette.purple, "#4ade80", "#38bdf8", "#f59e0b"],
+              borderColor: getCss("--surface-strong"),
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  color: palette.text,
+                  usePointStyle: true,
+                  padding: 14
+                }
+              }
+            }
+          }
+        });
+      }
+
+      const orders = state.data.orders || [];
+      const weeks = [0, 1, 2, 3, 4, 5].map((index) => {
+        const order = orders[index] || null;
+        return order ? Number(order.total) : 0;
+      }).reverse();
+      state.charts.earnings = new Chart(document.getElementById("earnings-chart"), {
+        type: "line",
+        data: {
+          labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"],
+          datasets: [{
+            label: "Weekly Earnings",
+            data: weeks,
+            borderColor: palette.gold,
+            backgroundColor: "rgba(212, 168, 67, 0.12)",
+            fill: true,
+            tension: 0.34,
+            pointRadius: 4,
+            pointBackgroundColor: palette.teal
+          }]
+        },
+        options: chartOptions({
+          plugins: { legend: { display: false } }
+        })
+      });
+    }
+
+    function renderAll() {
+      renderUserBar();
+      renderHeroStats();
+      renderPipeline();
+      renderKpis();
+      renderTopProducts();
+      renderSegments();
+      renderModelBars();
+      renderNotificationGrid();
+      renderSuggestionBox();
+      renderListingControls();
+      renderMyListings();
+      renderBuyerFilters();
+      renderCatalog();
+      renderChat();
+      renderCheckout();
+      renderTracking();
+      renderCharts();
+    }
+
+    function renderNotificationGrid() {
+      renderNotifications();
+    }
+
+    async function loadSession() {
+      try {
+        const payload = await api("/api/me");
+        state.user = payload.user;
+        state.summary = payload.summary;
+        toggleAuthScreen(false);
+      } catch (error) {
+        state.user = null;
+        state.summary = null;
+        toggleAuthScreen(true);
+      }
+      renderUserBar();
+    }
+
+    async function loadPublicData() {
+      const jobs = await Promise.allSettled([
+        api("/api/pipeline"),
+        api("/api/kpis"),
+        api("/api/demand"),
+        api("/api/districts"),
+        api("/api/price-optimization"),
+        api("/api/segments"),
+        api("/api/buyers"),
+        api("/api/top-products"),
+        api("/api/catalog")
+      ]);
+
+      const keys = ["pipeline", "kpis", "demand", "districts", "priceOptimization", "segments", "buyers", "topProducts", "catalog"];
+      const failed = [];
+      jobs.forEach((job, index) => {
+        if (job.status === "fulfilled") {
+          state.data[keys[index]] = job.value;
+        } else {
+          failed.push(keys[index]);
+        }
+      });
+
+      if (failed.length === keys.length) {
+        setApiStatus("offline", "API offline");
+        showError("The local API at http://localhost:5000 is unavailable.");
+      } else if (failed.length) {
+        setApiStatus("degraded", "Partial data loaded");
+        showError("Some live modules could not be loaded: " + failed.join(", ") + ".");
+      } else {
+        setApiStatus("live", "All analytics feeds live");
+        showError("");
+      }
+    }
+
+    async function loadPrivateData() {
+      if (!state.user) {
+        state.data.myListings = [];
+        state.data.orders = [];
+        state.data.messages = [];
+        return;
+      }
+
+      const jobs = await Promise.allSettled([
+        api("/api/listings?owner=me"),
+        api("/api/orders")
+      ]);
+
+      state.data.myListings = jobs[0].status === "fulfilled" ? jobs[0].value : [];
+      state.data.orders = jobs[1].status === "fulfilled" ? jobs[1].value : [];
+
+      if (!state.selectedListingId && state.data.catalog.length) {
+        state.selectedListingId = state.data.catalog[0].id;
+      }
+
+      await loadMessages();
+    }
+
+    async function loadMessages() {
+      if (!state.user || !state.selectedListingId) {
+        state.data.messages = [];
+        return;
+      }
+
+      try {
+        state.data.messages = await api("/api/messages?listing_id=" + encodeURIComponent(state.selectedListingId));
+      } catch (error) {
+        state.data.messages = [];
+      }
+    }
+
+    async function refreshAll() {
+      document.getElementById("page-loader").classList.remove("hidden");
+      try {
+        await loadSession();
+        await loadPublicData();
+        await loadPrivateData();
+        renderAll();
+      } finally {
+        document.getElementById("page-loader").classList.add("hidden");
+      }
+    }
+
+    async function submitLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+      try {
+        const payload = await api("/api/login", {
+          method: "POST",
+          body: JSON.stringify({ email, password })
+        });
+        state.user = payload.user;
+        state.summary = payload.summary;
+        toggleAuthScreen(false);
+        document.getElementById("auth-feedback").textContent = "Login successful.";
+        setRoute(state.user.role === "artisan" ? "/artisan" : state.user.role === "buyer" ? "/buyer" : "/admin");
+        await loadPublicData();
+        await loadPrivateData();
+        renderAll();
+      } catch (error) {
+        document.getElementById("auth-feedback").textContent = error.message;
+      }
+    }
+
+    async function submitSignup(event) {
+      event.preventDefault();
+      const payload = {
+        full_name: document.getElementById("signup-name").value.trim(),
+        email: document.getElementById("signup-email").value.trim(),
+        password: document.getElementById("signup-password").value,
+        role: document.getElementById("signup-role").value,
+        district: document.getElementById("signup-district").value
+      };
+      try {
+        const response = await api("/api/signup", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        state.user = response.user;
+        state.summary = response.summary;
+        toggleAuthScreen(false);
+        document.getElementById("auth-feedback").textContent = "Account created successfully.";
+        setRoute(state.user.role === "artisan" ? "/artisan" : state.user.role === "buyer" ? "/buyer" : "/admin");
+        await loadPublicData();
+        await loadPrivateData();
+        renderAll();
+      } catch (error) {
+        document.getElementById("auth-feedback").textContent = error.message;
+      }
+    }
+
+    async function submitListing(event) {
+      event.preventDefault();
+      if (!roleCanEditListings()) {
+        document.getElementById("listing-feedback").textContent = "Artisan or admin access is required for listing changes.";
+        return;
+      }
+
+      const id = document.getElementById("listing-id").value;
+      const payload = {
+        product_name: document.getElementById("listing-name").value.trim(),
+        category: document.getElementById("listing-category").value,
+        price: Number(document.getElementById("listing-price").value || 0),
+        district: document.getElementById("listing-district").value,
+        description: document.getElementById("listing-description").value.trim(),
+        status: document.getElementById("listing-status").value
+      };
+
+      try {
+        await api(id ? "/api/listings/" + encodeURIComponent(id) : "/api/listings", {
+          method: id ? "PUT" : "POST",
+          body: JSON.stringify(payload)
+        });
+        document.getElementById("listing-feedback").textContent = id ? "Listing updated successfully." : "Listing created successfully.";
+        await loadPublicData();
+        await loadPrivateData();
+        populateListingFields();
+        renderAll();
+      } catch (error) {
+        document.getElementById("listing-feedback").textContent = error.message;
+      }
+    }
+
+    async function removeListing(id) {
+      if (!roleCanEditListings()) {
+        showError("Artisan or admin access is required for listing deletion.");
+        return;
+      }
+      try {
+        await api("/api/listings/" + encodeURIComponent(id), { method: "DELETE" });
+        showError("");
+        await loadPublicData();
+        await loadPrivateData();
+        populateListingFields();
+        renderAll();
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    async function sendMessage() {
+      if (!state.user) {
+        toggleAuthScreen(true);
+        return;
+      }
+      if (!state.selectedListingId) {
+        showError("Select a listing before sending a message.");
+        return;
+      }
+      const input = document.getElementById("chat-input");
+      const text = input.value.trim();
+      if (!text) return;
+      try {
+        await api("/api/messages", {
+          method: "POST",
+          body: JSON.stringify({
+            listing_id: state.selectedListingId,
+            text
+          })
+        });
+        input.value = "";
+        await loadMessages();
+        renderChat();
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    async function placeOrder() {
+      if (!roleCanPlaceOrder()) {
+        showError("Buyer or admin access is required to place an order.");
+        return;
+      }
+      const listing = selectedListing();
+      if (!listing) {
+        showError("Select a listing before placing an order.");
+        return;
+      }
+      try {
+        await api("/api/orders", {
+          method: "POST",
+          body: JSON.stringify({
+            listing_id: listing.id,
+            payment_method: state.selectedPayment
+          })
+        });
+        showError("");
+        await loadPrivateData();
+        renderNotifications();
+        renderCheckout();
+        renderTracking();
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    async function logout() {
+      try {
+        await api("/api/logout", { method: "POST" });
+      } catch (error) {
+        console.error(error);
+      }
+      state.user = null;
+      state.summary = null;
+      state.data.myListings = [];
+      state.data.orders = [];
+      state.data.messages = [];
+      renderAll();
+      toggleAuthScreen(true);
+      setRoute("/admin");
+    }
+
+    function bindEvents() {
+      document.addEventListener("click", async (event) => {
+        const routeButton = event.target.closest("[data-route]");
+        if (routeButton) {
+          setRoute(routeButton.dataset.route);
+          return;
+        }
+
+        const sortButton = event.target.closest("[data-sort-key]");
+        if (sortButton) {
+          const key = sortButton.dataset.sortKey;
+          if (state.sortKey === key) {
+            state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+          } else {
+            state.sortKey = key;
+            state.sortDir = typeof state.data.topProducts[0]?.[key] === "number" ? "desc" : "asc";
+          }
+          renderTopProducts();
+          return;
+        }
+
+        const filterButton = event.target.closest("[data-filter]");
+        if (filterButton) {
+          state.buyerFilter = filterButton.dataset.filter;
+          renderBuyerFilters();
+          renderCatalog();
+          return;
+        }
+
+        const paymentButton = event.target.closest("[data-payment]");
+        if (paymentButton) {
+          state.selectedPayment = paymentButton.dataset.payment;
+          renderCheckout();
+          return;
+        }
+
+        const editButton = event.target.closest("[data-edit-listing]");
+        if (editButton) {
+          const listing = state.data.myListings.find((item) => item.id === editButton.dataset.editListing);
+          if (listing) {
+            populateListingFields(listing);
+            setRoute("/artisan");
+          }
+          return;
+        }
+
+        const deleteButton = event.target.closest("[data-delete-listing]");
+        if (deleteButton) {
+          await removeListing(deleteButton.dataset.deleteListing);
+          return;
+        }
+
+        const selectButton = event.target.closest("[data-select-listing], [data-chat-listing]");
+        if (selectButton) {
+          state.selectedListingId = selectButton.dataset.selectListing || selectButton.dataset.chatListing;
+          await loadMessages();
+          renderCatalog();
+          renderChat();
+          renderCheckout();
+          renderTracking();
+          setRoute("/buyer");
+          return;
+        }
+      });
+
+      window.addEventListener("popstate", () => {
+        setRoute(window.location.pathname, false);
+      });
+
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        setTheme(state.theme === "dark" ? "light" : "dark");
+      });
+
+      document.getElementById("auth-trigger-button").addEventListener("click", () => {
+        setAuthMode("login");
+        toggleAuthScreen(true);
+      });
+      document.getElementById("refresh-button").addEventListener("click", refreshAll);
+      document.getElementById("logout-button").addEventListener("click", logout);
+      document.getElementById("login-tab").addEventListener("click", () => setAuthMode("login"));
+      document.getElementById("signup-tab").addEventListener("click", () => setAuthMode("signup"));
+      document.getElementById("login-panel").addEventListener("submit", submitLogin);
+      document.getElementById("signup-panel").addEventListener("submit", submitSignup);
+      document.getElementById("listing-form").addEventListener("submit", submitListing);
+      document.getElementById("listing-reset").addEventListener("click", () => populateListingFields());
+      document.getElementById("listing-category").addEventListener("change", syncRecommendedPrice);
+      document.getElementById("buyer-search").addEventListener("input", (event) => {
+        state.buyerSearch = event.target.value;
+        renderCatalog();
+      });
+      document.getElementById("buyer-search-button").addEventListener("click", renderCatalog);
+      document.getElementById("chat-send").addEventListener("click", sendMessage);
+      document.getElementById("chat-input").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+      document.getElementById("place-order").addEventListener("click", placeOrder);
+
+      const installButton = document.getElementById("install-button");
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        state.installPrompt = event;
+        installButton.hidden = false;
+      });
+      installButton.addEventListener("click", async () => {
+        if (!state.installPrompt) return;
+        state.installPrompt.prompt();
+        await state.installPrompt.userChoice;
+        state.installPrompt = null;
+        installButton.hidden = true;
+      });
+    }
+
+    function boot() {
+      const savedTheme = localStorage.getItem(THEME_KEY) || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      setTheme(savedTheme);
+      setRoute(window.location.pathname, false);
+      bindEvents();
+      document.getElementById("signup-district").innerHTML = DISTRICTS.map((district) => `
+        <option value="${escapeHtml(district)}">${escapeHtml(district)}</option>
+      `).join("");
+      refreshAll().catch((error) => {
+        console.error(error);
+        setApiStatus("offline", "API offline");
+        showError("The application could not connect to the local API.");
+        document.getElementById("page-loader").classList.add("hidden");
+      });
+
+      if ("serviceWorker" in navigator && window.location.protocol !== "file:") {
+        const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+        window.addEventListener("load", async () => {
+          if (isLocalhost) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map((registration) => registration.unregister()));
+            if ("caches" in window) {
+              const cacheKeys = await caches.keys();
+              await Promise.all(cacheKeys.map((key) => caches.delete(key)));
+            }
+            return;
+          }
+          navigator.serviceWorker.register("/service-worker.js").catch(console.error);
+        });
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>

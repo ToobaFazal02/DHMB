@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">DHMB needle icon</title>
+  <desc id="desc">Needle inspired marketplace icon for the DHMB progressive web app.</desc>
+  <defs>
+    <linearGradient id="accent" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#2ec4a9"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="52" fill="#0e0b06"/>
+  <rect x="16" y="16" width="224" height="224" rx="40" fill="none" stroke="rgba(212,168,67,0.32)" stroke-width="2"/>
+  <path d="M166 52c16 16 16 42 0 58l-54 54-28-28 54-54c16-16 42-16 58 0Z" fill="url(#accent)"/>
+  <path d="m82 138 36 36-44 30c-6 4-14-4-10-10l18-26Z" fill="#e8714a"/>
+  <circle cx="174" cy="82" r="12" fill="#0e0b06" stroke="#f7ecd2" stroke-width="4"/>
+  <path d="M78 174c16-8 29-8 41 0 12 8 25 8 41 0" fill="none" stroke="#f7ecd2" stroke-linecap="round" stroke-width="8"/>
+  <text x="128" y="225" fill="#f7ecd2" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">DHMB</text>
+</svg>

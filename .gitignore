@@ -1,0 +1,44 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Local environment and secrets
+.env
+.env.*
+
+# Runtime logs and temp output
+*.log
+*.out
+*.err
+
+# Runtime app state (generated locally)
+data/runtime/users.json
+data/runtime/listings.json
+data/runtime/messages.json
+data/runtime/orders.json
+
+# Jupyter and notebook checkpoints
+.ipynb_checkpoints/
+
+# Node / frontend artifacts (if added later)
+node_modules/
+dist/
+build/
+.parcel-cache/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
