@@ -160,4 +160,4 @@ Response JSON:
 
 ## License
 
-Add your preferred license (for example, MIT) in a `LICENSE` file.
+This project is licensed under MIT License.
