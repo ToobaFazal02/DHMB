@@ -27,6 +27,9 @@ data/runtime/orders.json
 # Jupyter and notebook checkpoints
 .ipynb_checkpoints/
 
+# pytest
+.pytest_cache/
+
 # Node / frontend artifacts (if added later)
 node_modules/
 dist/

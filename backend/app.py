@@ -371,6 +371,78 @@ def health():
     return jsonify({"status": "ok"})
 
 
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    """Rule-based buyer assistant for the Lovable shop UI (no external LLM)."""
+    data = request.get_json(silent=True) or {}
+    message = str(data.get("message", "")).lower()
+    product = str(data.get("product") or "this product").strip() or "this product"
+    artisan = str(data.get("artisan") or "the artisan").strip() or "the artisan"
+
+    if any(w in message for w in ["price", "cost", "kitna", "rate"]):
+        reply = (
+            f"The price for {product} is clearly listed on the product page. "
+            "We also offer bulk discounts — contact us for orders above 5 units!"
+        )
+
+    elif any(w in message for w in ["ship", "deliver", "uae", "uk", "usa", "dubai", "international"]):
+        reply = (
+            "Yes! We ship internationally via TCS Express. UAE: 5-7 days (PKR 1,200). "
+            "UK: 10-14 days (PKR 2,500). USA: 12-15 days (PKR 3,000)."
+        )
+
+    elif any(w in message for w in ["handmade", "authentic", "original", "genuine", "real"]):
+        reply = (
+            f"Absolutely! {product} is 100% handmade by {artisan} using traditional Balochi techniques "
+            "passed down through generations. Each piece is unique and verified by our quality team."
+        )
+
+    elif any(w in message for w in ["how long", "time", "days", "when", "delivery time"]):
+        reply = (
+            "Domestic delivery (Pakistan): 3-5 days via TCS. International: 7-15 days depending on "
+            "location. You'll receive a tracking number via WhatsApp!"
+        )
+
+    elif any(w in message for w in ["discount", "offer", "sale", "cheap", "negotiate"]):
+        reply = (
+            "We offer 10% discount on orders above PKR 10,000 and 15% on bulk orders (5+ items). "
+            "Use code BALOCHI10 at checkout!"
+        )
+
+    elif any(w in message for w in ["return", "refund", "exchange"]):
+        reply = (
+            "We have a 7-day return policy for damaged items. Photos required. Refund processed within "
+            "3-5 business days to your original payment method."
+        )
+
+    elif any(w in message for w in ["payment", "pay", "jazzcash", "easypaisa", "card", "stripe"]):
+        reply = (
+            "We accept: Stripe (Credit/Debit card), JazzCash, EasyPaisa, and PayPal. "
+            "All payments are PCI-DSS secure and encrypted."
+        )
+
+    elif any(w in message for w in ["custom", "customize", "order", "special", "design"]):
+        reply = (
+            f"Yes! {artisan} accepts custom orders. Share your design requirements and we'll provide "
+            "a quote within 24 hours. Custom orders take 7-14 days."
+        )
+
+    elif any(w in message for w in ["hello", "hi", "salam", "assalam", "hey"]):
+        reply = (
+            f"السلام علیکم! Welcome to DHMB. I'm here to help you with {product}. "
+            "Ask me about pricing, shipping, or authenticity!"
+        )
+
+    else:
+        reply = (
+            f"Thank you for your interest in {product}! For specific questions, I'll connect you with "
+            f"{artisan} directly. They typically respond within 2 hours. Is there anything specific "
+            "I can help you with?"
+        )
+
+    return jsonify({"reply": reply, "artisan": artisan, "timestamp": now_iso()})
+
+
 @app.route("/api/signup", methods=["POST"])
 def signup():
     payload = request.get_json(silent=True) or {}
