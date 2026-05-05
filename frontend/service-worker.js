@@ -1,4 +1,4 @@
-const CACHE_NAME = "dhmb-pwa-v3";
+const CACHE_NAME = "dhmb-pwa-v4";
 const APP_SHELL = [
   "/",
   "/admin",

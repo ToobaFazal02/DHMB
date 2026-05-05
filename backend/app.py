@@ -1,13 +1,45 @@
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
 import pandas as pd
 from flask import Flask, jsonify, request, send_from_directory, session
-from flask_cors import CORS
 from werkzeug.security import check_password_hash, generate_password_hash
+
+# Browser CORS: allow Lovable previews (*.lovable.app), localhost, and optional
+# DHMB_CORS_ORIGINS (comma-separated exact origins). Applied on every response so
+# 404/error handlers still send Access-Control-Allow-Origin when Origin matches.
+_LOVABLE_ORIGIN_RE = re.compile(r"^https://[\w.-]+\.lovable\.app$")
+_DEV_ORIGINS = frozenset(
+    {
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "http://localhost:4173",
+        "http://127.0.0.1:4173",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    }
+)
+
+
+def _extra_cors_origins() -> frozenset:
+    raw = os.environ.get("DHMB_CORS_ORIGINS", "")
+    return frozenset(x.strip() for x in raw.split(",") if x.strip())
+
+
+def _cors_allow_origin(origin: str | None) -> bool:
+    if not origin:
+        return False
+    if origin in _DEV_ORIGINS or origin in _extra_cors_origins():
+        return True
+    return bool(_LOVABLE_ORIGIN_RE.match(origin))
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -70,6 +102,7 @@ LISTING_SEED = [
         "district": "Quetta",
         "price": 4425,
         "description": "Published from the live pricing range for Balochi embroidery and aligned with Quetta demand records.",
+        "image_url": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=900",
         "status": "published",
         "created_at": "",
         "updated_at": "",
@@ -82,6 +115,7 @@ LISTING_SEED = [
         "district": "Quetta",
         "price": 7782,
         "description": "Marketplace listing anchored to the current marble craft optimization range.",
+        "image_url": "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=900",
         "status": "published",
         "created_at": "",
         "updated_at": "",
@@ -94,6 +128,7 @@ LISTING_SEED = [
         "district": "Turbat",
         "price": 14050,
         "description": "Published catalog item derived from the gold layer carpet pricing record.",
+        "image_url": "https://images.unsplash.com/photo-1600166898405-da9535204843?w=900",
         "status": "published",
         "created_at": "",
         "updated_at": "",
@@ -105,7 +140,26 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("DHMB_SECRET_KEY", "dhmb-local-dev-secret")
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_HTTPONLY"] = True
-CORS(app, supports_credentials=True)
+
+
+@app.after_request
+def _add_cors_headers(response):
+    origin = request.headers.get("Origin")
+    if _cors_allow_origin(origin):
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Vary"] = "Origin"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    return response
+
+
+@app.before_request
+def _cors_preflight():
+    if request.method != "OPTIONS":
+        return None
+    resp = app.make_response(("", 204))
+    return _add_cors_headers(resp)
 
 
 def now_iso() -> str:
@@ -666,6 +720,7 @@ def listings_create():
     category = str(payload.get("category", "")).strip()
     district = str(payload.get("district", "")).strip()
     description = str(payload.get("description", "")).strip()
+    image_url = str(payload.get("image_url", "")).strip()
     status = str(payload.get("status", "published")).strip().lower()
 
     try:
@@ -684,6 +739,7 @@ def listings_create():
         "district": district,
         "price": price,
         "description": description,
+        "image_url": image_url,
         "status": status if status in {"draft", "published"} else "published",
         "created_at": now_iso(),
         "updated_at": now_iso(),
@@ -709,7 +765,7 @@ def listings_update(listing_id):
     if listing["owner_id"] != user["id"] and user["role"] != "admin":
         return jsonify({"error": "You can only edit your own listings."}), 403
 
-    for field in ["product_name", "category", "district", "description", "status"]:
+    for field in ["product_name", "category", "district", "description", "status", "image_url"]:
         if field in payload:
             listing[field] = str(payload[field]).strip()
 

@@ -29,7 +29,7 @@ Use that base for analytics routes (`GET /api/kpis`, etc.) and for the shop chat
 
 - Python
 - Flask
-- Flask-CORS
+- CORS (custom `Access-Control-*` headers for Lovable `*.lovable.app` + optional `DHMB_CORS_ORIGINS`)
 - Pandas
 - HTML/CSS/JavaScript
 - Chart.js
@@ -91,6 +91,17 @@ pytest
 
 - `DHMB_SECRET_KEY` - session secret key for Flask
 - `FLASK_DEBUG` - set to `1` for debug mode
+- `DHMB_CORS_ORIGINS` - optional comma-separated list of extra allowed browser `Origin` values (e.g. your custom domain). Lovable hosts under `https://*.lovable.app` are allowed by default; `localhost` dev ports are too.
+
+### Lovable / browser: CORS and 404
+
+- If the console shows **CORS** and **404** for `GET /api/demand` etc., first open **`/api/health`** on the same Render URL. If health fails, the service is down, wrong URL, or not this app—fix **Render** (start command, branch, or cold start), not the frontend.
+- When the server returns an error without CORS headers, the browser often reports **CORS blocked** even when the real problem is **404/502**. After deploy, this app sends CORS headers on responses when `Origin` is an allowed Lovable or localhost origin.
+- **Supabase `403` on `products`:** that is **Row Level Security** in your Supabase project, not the Render API. Fix policies in the Supabase Dashboard (or in Lovable’s SQL) for `SELECT`/`INSERT` on `products` for authenticated users.
+
+### “Hadoop” vs this API
+
+The Render deployment runs **Flask** and reads analytics **CSVs** from `data/processed/`. It is **not** a live Hadoop cluster in production—your pipeline may have used Hadoop/Spark offline to produce those files.
 
 Example (PowerShell):
 

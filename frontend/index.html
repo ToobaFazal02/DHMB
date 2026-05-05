@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="DHMB">
-  <title>DHMB | Digital Handicraft Marketplace for Balochistan</title>
+  <!-- <title>DHMB | Digital Handicraft Marketplace for Balochistan</title> -->
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/icon.svg">
@@ -778,6 +778,16 @@
       transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
     }
 
+    .product-image {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-radius: calc(var(--radius) - 2px);
+      border: 1px solid var(--line);
+      background: var(--surface-alt);
+      margin-bottom: 12px;
+    }
+
     .product-card:hover {
       transform: translateY(-4px);
       border-color: var(--line-strong);
@@ -1088,7 +1098,7 @@
   <div id="auth-screen" class="auth-screen hidden">
     <div class="auth-card">
       <div>
-        <p class="eyebrow">Digital Handicraft Marketplace for Balochistan</p>
+        <!-- <p class="eyebrow">Digital Handicraft Marketplace for Balochistan</p> -->
         <h2>Login or create an account</h2>
         <p class="subtext">The logged in account controls the displayed person name, role based actions, listings, orders, and message history.</p>
       </div>
@@ -1152,9 +1162,9 @@
         <div class="brand">
           <div class="brand-mark">DH</div>
           <div>
-            <p class="eyebrow">Digital Handicraft Marketplace for Balochistan</p>
+            <!-- <p class="eyebrow">Digital Handicraft Marketplace for Balochistan</p> -->
             <h1>DHMB marketplace workspace</h1>
-            <p>Live dashboards, accounts, listings, orders, and chat.</p>
+            <!-- <p>Live dashboards, accounts, listings, orders, and chat.</p> -->
           </div>
         </div>
 
@@ -1392,6 +1402,10 @@
                 <label for="listing-description">Description</label>
                 <textarea id="listing-description" placeholder="Describe the product, material, and delivery readiness."></textarea>
               </div>
+              <div class="field">
+                <label for="listing-image-url">Image URL</label>
+                <input id="listing-image-url" type="url" placeholder="https://images.unsplash.com/...">
+              </div>
               <div class="button-row">
                 <button class="button primary" type="submit">Save Listing</button>
                 <button id="listing-reset" class="button" type="button">Reset Form</button>
@@ -1546,7 +1560,12 @@
   </nav>
 
   <script>
-    const API_BASE = "http://localhost:5000";
+    const API_BASE = (() => {
+      const fromQuery = new URLSearchParams(window.location.search).get("api_base");
+      const fromStorage = localStorage.getItem("dhmb_api_base");
+      const base = fromQuery || fromStorage || window.location.origin;
+      return String(base).replace(/\/+$/, "");
+    })();
     const THEME_KEY = "dhmb-theme";
     const ROUTES = new Set(["/admin", "/artisan", "/buyer"]);
     const DEFAULT_ROUTE = "/admin";
@@ -1596,6 +1615,40 @@
       return String(value ?? "").replaceAll("_", " ");
     }
 
+    const PRODUCT_IMAGE_FALLBACK =
+      "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=900";
+
+    function categoryImage(category) {
+      const key = String(category || "").toLowerCase();
+      if (key.includes("embroidery") || key.includes("mirror")) {
+        return "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=900";
+      }
+      if (key.includes("gem")) {
+        return "https://images.unsplash.com/photo-1551122087-f99b4ec3a5e6?w=900";
+      }
+      if (key.includes("carpet")) {
+        return "https://images.unsplash.com/photo-1600166898405-da9535204843?w=900";
+      }
+      if (key.includes("marble")) {
+        return "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=900";
+      }
+      if (key.includes("pottery")) {
+        return "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=900";
+      }
+      if (key.includes("wood")) {
+        return "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900";
+      }
+      if (key.includes("leather")) {
+        return "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900";
+      }
+      return PRODUCT_IMAGE_FALLBACK;
+    }
+
+    function listingImage(item) {
+      const url = String(item?.image_url || "").trim();
+      return url || categoryImage(item?.category);
+    }
+
     function formatNumber(value) {
       if (value == null || Number.isNaN(Number(value))) return "-";
       return new Intl.NumberFormat("en-US").format(Number(value));
@@ -1619,7 +1672,7 @@
     async function api(path, options = {}) {
       const response = await fetch(API_BASE + path, {
         cache: "no-store",
-        credentials: "same-origin",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           ...(options.headers || {})
@@ -2072,6 +2125,7 @@
       document.getElementById("listing-district").value = listing?.district || state.user?.district || DISTRICTS[0];
       document.getElementById("listing-status").value = listing?.status || "published";
       document.getElementById("listing-description").value = listing?.description || "";
+      document.getElementById("listing-image-url").value = listing?.image_url || "";
       syncRecommendedPrice();
     }
 
@@ -2172,6 +2226,13 @@
 
       root.innerHTML = items.map((item) => `
         <article class="product-card">
+          <img
+            class="product-image"
+            src="${escapeHtml(listingImage(item))}"
+            alt="${escapeHtml(item.product_name)}"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_FALLBACK}';"
+          >
           <div class="record-head">
             <div>
               <strong>${escapeHtml(item.product_name)}</strong>
@@ -2597,6 +2658,7 @@
         price: Number(document.getElementById("listing-price").value || 0),
         district: document.getElementById("listing-district").value,
         description: document.getElementById("listing-description").value.trim(),
+        image_url: document.getElementById("listing-image-url").value.trim(),
         status: document.getElementById("listing-status").value
       };
 
